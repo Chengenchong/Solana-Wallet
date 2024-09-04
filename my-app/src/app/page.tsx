@@ -1,4 +1,6 @@
-"use client"; // Ensure this page is treated as a client-side component
+import React from 'react';
+import TransactionHistory from './transaction-history/page'; // Adjust the path to where your page.tsx file is located
+import { Sidebar } from './Sidebar'; // Correct path to Sidebar component
 
 import { Sidebar } from "./Sidebar"; // Adjust path as necessary
 import React, { useMemo, useEffect, useState, FC } from "react";
@@ -90,7 +92,6 @@ export const WalletDisplay: FC = () => {
   );
 };
 
-export default function Home() {
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar />
@@ -100,5 +101,8 @@ export default function Home() {
         <WalletDisplay />
       </main>
     </div>
+
   );
-}
+};
+
+export default WalletPage;
