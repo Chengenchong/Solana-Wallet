@@ -1,20 +1,81 @@
-import React from 'react';
-import TransactionHistory from './transaction-history/page'; // Adjust the path to where your page.tsx file is located
-import { Sidebar } from './Sidebar'; // Correct path to Sidebar component
+"use client";
 
-const WalletPage = () => {
-  const walletAddress = 'YourWalletAddressHere'; // Replace with your actual wallet address
+import React, { useMemo, useEffect, useState } from "react";
+import {
+  ConnectionProvider,
+  WalletProvider,
+  useWallet,
+  useConnection,
+} from "@solana/wallet-adapter-react";
+import {
+  WalletModalProvider,
+  WalletMultiButton,
+} from "@solana/wallet-adapter-react-ui";
+import {
+  PhantomWalletAdapter,
+} from "@solana/wallet-adapter-wallets";
+import { clusterApiUrl, LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import '@solana/wallet-adapter-react-ui/styles.css';
+import { Sidebar } from "./Sidebar";
+import { useWalletContext } from './WalletContext'; // Adjust the path as needed
+
+export default function Home() {
+  const endpoint = useMemo(
+    () => clusterApiUrl(WalletAdapterNetwork.Devnet),
+    []
+  );
+
+  const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar />
       <main style={{ flexGrow: 1, padding: "20px", transition: "margin-left 0.45s" }}>
-        <h1>Wallet Overview</h1>
-
+        <ConnectionProvider endpoint={endpoint}>
+          <WalletProvider wallets={wallets} autoConnect={true}>
+            <WalletModalProvider>
+              <div style={{ padding: "20px" }}>
+                <WalletMultiButton />
+                <WalletDisplay />
+              </div>
+            </WalletModalProvider>
+          </WalletProvider>
+        </ConnectionProvider>
       </main>
     </div>
+  );
+}
 
+const WalletDisplay = () => {
+  const { publicKey } = useWallet();
+  const { connection } = useConnection();
+  const [balance, setBalance] = useState<number | null>(null);
+  const { setPublicKey } = useWalletContext();
+
+  useEffect(() => {
+    if (publicKey) {
+      connection
+        .getBalance(publicKey)
+        .then((balance) => setBalance(balance / LAMPORTS_PER_SOL))
+        .catch((error) => console.error("Error fetching balance:", error));
+      setPublicKey(publicKey);
+    } else {
+      setBalance(null);
+      setPublicKey(null);
+    }
+  }, [publicKey, connection, setPublicKey]);
+
+  return (
+    <div style={{ marginTop: "20px" }}>
+      {publicKey ? (
+        <div>
+          <p>Wallet Address: {publicKey.toBase58()}</p>
+          <p>Balance: {balance !== null ? `${balance} SOL` : "Loading..."}</p>
+        </div>
+      ) : (
+        <p>No wallet connected</p>
+      )}
+    </div>
   );
 };
-
-export default WalletPage;
