@@ -18,6 +18,7 @@ import { clusterApiUrl, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import '@solana/wallet-adapter-react-ui/styles.css';
 import { Sidebar } from "./Sidebar";
+import { useWalletContext } from './WalletContext'; // Adjust the path as needed
 
 export default function Home() {
   const endpoint = useMemo(
@@ -50,6 +51,7 @@ const WalletDisplay = () => {
   const { publicKey } = useWallet();
   const { connection } = useConnection();
   const [balance, setBalance] = useState<number | null>(null);
+  const { setPublicKey } = useWalletContext();
 
   useEffect(() => {
     if (publicKey) {
@@ -57,10 +59,12 @@ const WalletDisplay = () => {
         .getBalance(publicKey)
         .then((balance) => setBalance(balance / LAMPORTS_PER_SOL))
         .catch((error) => console.error("Error fetching balance:", error));
+      setPublicKey(publicKey);
     } else {
       setBalance(null);
+      setPublicKey(null);
     }
-  }, [publicKey, connection]);
+  }, [publicKey, connection, setPublicKey]);
 
   return (
     <div style={{ marginTop: "20px" }}>

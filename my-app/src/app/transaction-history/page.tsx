@@ -1,51 +1,68 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { getTransactionHistory } from './gettransaction'; // Adjust the path to where your gettransaction.ts file is located
-import { Sidebar } from "../Sidebar"; // Correct path to Sidebar component
+import React, { useEffect, useState } from "react";
+import { useConnection } from "@solana/wallet-adapter-react";
+import { useWalletContext } from "../WalletContext"; // Import the context
+import { PublicKey } from "@solana/web3.js";
+import { Sidebar } from "../Sidebar";
 
-const walletAddress = '6LG6a1aUE34N8hVsZkEHaq4A1v7oYsSqHnM1Rzb2y7Kq'; // Replace with your actual wallet address
-
-const TransactionHistory = () => {
-  const [transactions, setTransactions] = useState<any[]>([]);
+export default function TransactionHistory() {
+  const { publicKey } = useWalletContext(); // Get the publicKey from context
+  const { connection } = useConnection();
+  const [transactionHistory, setTransactionHistory] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    async function fetchTransactions() {
-      const txHistory = await getTransactionHistory(walletAddress);
-      setTransactions(txHistory);
+    console.log("Connection:", connection); // Debugging: log the connection
+    if (!connection) {
+      console.error("No connection available.");
+      return;
     }
 
-    fetchTransactions();
-  }, []);
+    const fetchTransactionHistory = async () => {
+      if (!publicKey) {
+        setTransactionHistory([]);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const walletPublicKey = new PublicKey(publicKey.toString());
+        const signatures = await connection.getSignaturesForAddress(walletPublicKey, { limit: 10 });
+        setTransactionHistory(signatures);
+      } catch (error) {
+        console.error("Error fetching transaction history:", error);
+        setTransactionHistory([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTransactionHistory();
+  }, [publicKey, connection]);
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar />
       <main style={{ flexGrow: 1, padding: "20px", transition: "margin-left 0.45s" }}>
         <h2>Transaction History</h2>
-        {transactions.length > 0 ? (
+        {loading ? (
+          <p>Loading transaction history...</p>
+        ) : transactionHistory.length > 0 ? (
           <ul>
-            {transactions.map((tx, index) => (
+            {transactionHistory.map((tx, index) => (
               <li key={index}>
-                Signature: {tx.transaction.signatures[0]}
-                <br />
-                Slot: {tx.slot}
-                <br />
-                Fee: {tx.meta.fee} lamports
-                <br />
-                Block Time: {new Date(tx.blockTime * 1000).toLocaleString()}
-                <br />
-                Status: {tx.meta.err ? 'Failed' : 'Success'}
-                {/* You can add more details like token transfers, etc. */}
+                <p>Transaction Signature: {tx.signature}</p>
+                <p>Slot: {tx.slot}</p>
+                <p>Confirmation Status: {tx.confirmationStatus}</p>
               </li>
             ))}
           </ul>
         ) : (
-          <p>No transactions found</p>
+          <p>No transaction history found.</p>
         )}
       </main>
     </div>
   );
 };
-
-export default TransactionHistory;
