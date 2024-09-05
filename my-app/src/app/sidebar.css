@@ -1,5 +1,5 @@
 body {
-  background: #0d0d0d; /* Dark background, close to black */
+  background: #0d0d0d; /* Dark background */
   color: white;
   background-size: cover;
 }
@@ -7,58 +7,65 @@ body {
 .sidebar {
   z-index: 2;
   border-radius: 8px;
-  width: 56px;
+  width: 56px; /* Collapsed width */
   background: #1a1a1a; /* Slightly lighter shade for the sidebar */
   backdrop-filter: blur(10px);
-  transition: width 0.45s;
+  transition: width 0.45s; /* Smooth transition on width change */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .sidebar.open {
-  width: 230px;
+  width: 230px; /* Expanded width */
 }
 
 .sidebar .inner {
-  width: 230px;
+  width: 100%;
 }
 
 .sidebar header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 64px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  padding: 0 6px;
+  padding: 0 12px;
 }
 
 .sidebar nav {
   display: grid;
-  padding: 0 6px;
-  gap: 12px; /* Increased gap between items */
+  padding: 0 12px;
+  gap: 12px;
+  width: 100%;
 }
 
 .sidebar nav > button {
   display: flex;
-  gap: 12px;
+  justify-content: start; /* Align content to the start when expanded */
   align-items: center;
-  height: 44px;
-  width: 200px;
+  height: 56px;
   padding: 0 12px;
   border-radius: 8px;
   opacity: 0.7;
   color: #f9f9f9;
-  transition: box-shadow 0.3s, background-color 0.3s;
+  transition: box-shadow 0.3s, background-color 0.3s, transform 0.45s; /* Smooth transform */
+  background: none;
+  box-shadow: none;
 }
 
-/* When the sidebar is open, apply hover effect to the whole button */
+/* Sidebar button hover when open */
 .sidebar.open nav > button:hover {
   background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.2); /* Increase shadow size and length */
+  box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.2);
   opacity: 1;
 }
 
-/* When the sidebar is closed, apply the hover effect only on the icon (svg) */
+/* Only apply the hover effect to the icon (svg) when sidebar is closed */
 .sidebar:not(.open) nav > button:hover svg {
-  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.2); /* Shadow only on the icon */
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.2);
+  transition: box-shadow 0.3s ease;
 }
 
 /* No shadow on the whole button when sidebar is closed */
@@ -66,21 +73,32 @@ body {
   box-shadow: none;
 }
 
-/* Ensure smooth transition for the icon hover shadow */
-.sidebar nav > button svg {
-  transition: box-shadow 0.3s ease;
-}
-
-/* Sidebar is closed, hide text */
+/* Remove the text when the sidebar is closed */
 .sidebar:not(.open) nav > button p {
-  display: none; /* Hide the text when sidebar is not open */
+  display: none;
 }
 
-/* When the sidebar is open, show text */
+/* Show the text when the sidebar is expanded */
 .sidebar.open nav > button p {
-  display: block; /* Show the text when the sidebar is open */
+  display: block;
+  margin-left: 12px;
   opacity: 1;
   transition: opacity 0.25s ease-in-out;
+}
+
+/* Smooth transition for icon movement */
+.sidebar nav > button svg {
+  transition: transform 0.45s ease-in-out;
+}
+
+/* Move the icon back to the center when sidebar is closed */
+.sidebar:not(.open) nav > button svg {
+  transform: translateX(0); /* Keep the icon centered */
+}
+
+/* Move the icon to the left when the sidebar is expanded */
+.sidebar:not(.open) nav > button svg {
+  transform: translateX(-5px); /* Adjust value based on the design */
 }
 
 .sidebar-burger {
@@ -95,5 +113,5 @@ body {
   flex-grow: 1;
   padding: 20px;
   transition: margin-left 0.45s;
-  color: #fff; /* Ensure text is visible on dark background */
+  color: #fff;
 }
