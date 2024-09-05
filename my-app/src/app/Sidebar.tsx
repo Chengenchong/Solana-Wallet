@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaBars, FaTimes, FaWallet, FaHistory, FaCreditCard } from "react-icons/fa";
+import { FaBars, FaTimes, FaWallet, FaHistory, FaCreditCard, FaTachometerAlt } from "react-icons/fa";
 import "./sidebar.css";
+
 
 const navItems = [
   { name: "Sol Wallet", icon: <FaWallet />, route: "/" },
+  { name: "Dashboard", icon: <FaTachometerAlt />, route: "/Dashboard-page" },
   { name: "Transaction History", icon: <FaHistory />, route: "/transaction-history" },
   { name: "Sol Card", icon: <FaCreditCard />, route: "/sol-card" }
 ];
