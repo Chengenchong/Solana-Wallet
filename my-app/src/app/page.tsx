@@ -28,6 +28,18 @@ export default function Home() {
 
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    // Set isClient to true when the component mounts
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    // Don't render anything on the server
+    return null;
+  }
+
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar />
