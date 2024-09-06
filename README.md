@@ -16,9 +16,9 @@ yarn dev
 ```
 ## If an error occurs due to dependencies not being fully installed, run the following code
 ```
-- npm install recharts
-- npm install react-chartjs-2 chart.js chartjs-chart-financial
-- npm install --save react-toastify
-- npm install framer-motion
-- npm i --save bs58
+npm install recharts
+npm install react-chartjs-2 chart.js chartjs-chart-financial
+npm install --save react-toastify
+npm install framer-motion
+npm i --save bs58
 ```
