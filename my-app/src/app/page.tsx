@@ -51,7 +51,7 @@ export default function Home() {
               {/* Parent div with space between to left-align title and right-align button */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px" }}>
                 {/* Left-aligned title with gradient animation */}
-                <h3 style={gradientTextStyle}>Your Sol-Wallet</h3>
+                <h3 style={gradientTextStyle}>Sol Secure</h3>
                 {/* Right-aligned connect button */}
                 <WalletMultiButton />
               </div>
