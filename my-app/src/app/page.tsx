@@ -7,17 +7,21 @@ import {
   useWallet,
   useConnection,
 } from "@solana/wallet-adapter-react";
+import { PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL, sendAndConfirmTransaction, clusterApiUrl } from '@solana/web3.js';
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { motion } from "framer-motion";
 import {
   WalletModalProvider,
   WalletMultiButton,
 } from "@solana/wallet-adapter-react-ui";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
-import { clusterApiUrl, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { Sidebar } from "./Sidebar";
 import { useWalletContext } from "./WalletContext";
 import SolToUsdChart from "./exchangeratechart"; // Import the chart component
+import "./globals.css";
 
 export default function Home() {
   const endpoint = useMemo(
@@ -91,6 +95,9 @@ styleSheet.innerText = styles;
 document.head.appendChild(styleSheet);
 
 const WalletDisplay = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [solAmount, setSolAmount] = useState<string>("");
+  const [recipientAddress, setRecipientAddress] = useState<string>("");
   const { publicKey } = useWallet();
   const { connection } = useConnection();
   const [balance, setBalance] = useState<number | null>(null);
@@ -115,15 +122,61 @@ const WalletDisplay = () => {
     // Add functionality for receiving SOL
   };
 
-  const handleSend = () => {
-    console.log("Send clicked");
-    // Add functionality for sending SOL
-  };
-
   const handleSwap = () => {
     console.log("Swap clicked");
     // Add functionality for swapping tokens
   };
+
+  const handleSend = async () => {
+    if (!publicKey) {
+        toast.error("Please provide all required details.");
+        return;
+    }
+    if (!recipientAddress || !solAmount) {
+        toast.error("Please provide the recipient's address and the amount.");
+        return;
+    }
+
+    try {
+        const recipientPublicKey = new PublicKey(recipientAddress);
+        const { blockhash } = await connection.getLatestBlockhash();
+        
+        // Create a transaction to send SOL
+        const transaction = new Transaction();
+        transaction.recentBlockhash = blockhash; // Set the recent blockhash
+        transaction.feePayer = publicKey; // Set the fee payer
+        transaction.add(
+            SystemProgram.transfer({
+                fromPubkey: publicKey,
+                toPubkey: recipientPublicKey,
+                lamports: parseFloat(solAmount) * LAMPORTS_PER_SOL, // Convert SOL to lamports
+            })
+        );
+
+        // Get the wallet provider (e.g., Phantom) to sign the transaction
+        const { solana } = window as any;
+        if (solana && solana.isPhantom) {
+            const signedTransaction = await solana.signTransaction(transaction);
+
+            // Send the signed transaction using sendRawTransaction
+            const signature = await connection.sendRawTransaction(signedTransaction.serialize(), {
+                skipPreflight: false,
+                preflightCommitment: "confirmed",
+            });
+            console.log("Transaction Signature:", signature);
+            toast.success(`Transaction Successful: ${signature}`);
+            setIsModalOpen(false);
+            } else {
+                toast.error("Phantom Wallet not found! Please install it from https://phantom.app");
+            }
+            } catch (error) {
+                console.error("Transaction failed:", error);
+                toast.error("Transaction failed. Please try again.");
+            }
+        };
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
@@ -159,10 +212,61 @@ const WalletDisplay = () => {
         gap: '50px',                  // Increase space between buttons
       }}>
         <button style={buttonStyle} onClick={handleReceive}>Receive</button>
-        <button style={buttonStyle} onClick={handleSend}>Send</button>
+        <button style={buttonStyle} onClick={openModal}>Send</button>
         <button style={buttonStyle} onClick={handleSwap}>Swap</button>
       </div>
+
+      {/* Toast Notifications */}
+      <ToastContainer />
+
+      {/* Modal for Sending SOL */}
+      {isModalOpen && (
+        <motion.div
+          className="modalBackdrop"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <motion.div
+            className="modalContent"
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <h2 className="modalTitle">Send SOL</h2>
+            <input
+              type="text"
+              placeholder="Recipient's Wallet Address"
+              value={recipientAddress}
+              onChange={(e) => setRecipientAddress(e.target.value)}
+              className="modalInput"
+            />
+            <div className="solAmountContainer">
+              <input
+                type="number"
+                placeholder="Amount in SOL"
+                value={solAmount}
+                onChange={(e) => setSolAmount(e.target.value)}
+                className="modalInput"
+              />
+            </div>
+
+            <p className="myrEquivalent">
+              ≈ {parseFloat(solAmount) * 100 || 0} MYR
+            </p>
+            <div className="modalActions">
+              <button onClick={handleSend} className="sendButton">
+                Send
+              </button>
+              <button onClick={closeModal} className="cancelButton">
+                Cancel
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
+    
   );
 };
 
