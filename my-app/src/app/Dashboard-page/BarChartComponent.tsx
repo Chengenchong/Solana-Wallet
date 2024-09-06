@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
@@ -13,17 +13,43 @@ const data = [
   { name: 'Jul', revenue: 3490, expenses: 4300 },
 ];
 
-const BarChartComponent: React.FC = () => {
+const BarChartComponent = () => {
+  const [hoveredBar, setHoveredBar] = useState<number | null>(null);
+
+  const handleMouseEnter = (index: number) => {
+    setHoveredBar(index);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredBar(null);
+  };
+
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
+        <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+        <XAxis dataKey="name" stroke="#aaa" />
+        <YAxis stroke="#aaa" />
         <Tooltip />
         <Legend />
-        <Bar dataKey="revenue" fill="#8884d8" />
-        <Bar dataKey="expenses" fill="#82ca9d" />
+
+        {/* Bar for Revenue */}
+        <Bar
+          dataKey="revenue"
+          fill={hoveredBar === 0 ? "#5A5AFF" : "#6c63ff"}  // Change to a different color when hovered
+          onMouseEnter={() => handleMouseEnter(0)}
+          onMouseLeave={handleMouseLeave}
+          radius={[10, 10, 0, 0]}
+        />
+
+        {/* Bar for Expenses */}
+        <Bar
+          dataKey="expenses"
+          fill={hoveredBar === 1 ? "#24a148" : "#28a745"}  // Change to a different color when hovered
+          onMouseEnter={() => handleMouseEnter(1)}
+          onMouseLeave={handleMouseLeave}
+          radius={[10, 10, 0, 0]}
+        />
       </BarChart>
     </ResponsiveContainer>
   );
