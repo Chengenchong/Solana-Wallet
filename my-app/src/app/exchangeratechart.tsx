@@ -57,7 +57,7 @@ export default function SolToUsdChart() {
       {
         label: "SOL to USD",
         data: chartData,
-        borderColor: "rgba(75,192,192,1)",
+        borderColor: "#633AC7",
         fill: false,
       },
     ],
@@ -96,7 +96,7 @@ export default function SolToUsdChart() {
         width: "100%", // Set width to 100% for better responsiveness
         padding: "10px",
         borderRadius: "12px",
-        backgroundColor: "#444",
+        backgroundColor: "#333",
         fontSize: "0.9em",
         marginBottom: "20px",
       }}>
@@ -106,7 +106,7 @@ export default function SolToUsdChart() {
       </div>
 
       {/* Chart */}
-      <div style={{ width: "100%", height: "250px", padding: "10px" }}> {/* Adjust height */}
+      <div style={{ width: "100%", height: "250px", padding: "10px", }}> {/* Adjust height */}
         <Line 
           data={data}
           options={{

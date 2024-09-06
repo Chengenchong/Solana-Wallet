@@ -90,7 +90,7 @@ export default function TransactionHistory() {
             position: "absolute",
             right: "20px",
             top: "20px",
-            backgroundColor: showSignature ? "#8884d8" : "#f44336", // Green if showing signature, red otherwise
+            backgroundColor: showSignature ? "#f44336" : "#633AC7", // Green if showing signature, red otherwise
             color: "white",
             border: "none",
             padding: "10px 20px",

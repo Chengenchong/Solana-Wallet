@@ -14,7 +14,7 @@
   }
   
   .balance-info > div {
-    background: #f5f5f5;
+    background: #2c2c2c;
     padding: 10px;
     border-radius: 8px;
     text-align: center;
@@ -29,16 +29,18 @@
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
-    color: #fff;
+    color: #2c2c2c;
     cursor: pointer;
   }
   
   .register-btn {
     background-color: #6c63ff;
+    color: white;
   }
   
   .commit-btn {
     background-color: #8a63d2;
+    color: white;
   }
   
   .main-content {
@@ -80,7 +82,7 @@
   }
   
   .chart-section, .employee-section {
-    background-color: white;
+    background-color: #2c2c2c;
     padding: 20px;
     border-radius: 8px;
     flex: 1; /* Makes both sections take up equal space */
@@ -99,7 +101,7 @@
   
   .balance-analytics, .recent-payroll {
     margin-top: 25px;
-    background-color: white;
+    background-color: #2c2c2c;
     padding: 20px;
     border-radius: 8px;
     width: 100%;
