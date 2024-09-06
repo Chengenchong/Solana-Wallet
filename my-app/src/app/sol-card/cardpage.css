@@ -1,0 +1,185 @@
+/* Gradient text style for Sol-Cards with animation */
+.gradient-text {
+    font-size: 30px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #00FFA3, #DC1FFF); /* Gradient colors */
+    background-size: 200%; /* Allows smooth animation */
+    -webkit-background-clip: text; /* Ensures gradient is applied to text */
+    -webkit-text-fill-color: transparent; /* Makes the background visible through the text */
+    background-clip: text;
+    text-fill-color: transparent;
+    animation: gradient-animation 3s ease infinite; /* Controls animation speed */
+    margin-top: 10px;
+    margin-left: 20px;
+  }
+  
+  /* Keyframes for the gradient animation */
+  @keyframes gradient-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+
+.cards-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+    width: 100%; /* Ensure the page takes full width */
+    box-sizing: border-box; /* Include padding in the width calculation */
+}
+  
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* Full width */
+}
+  
+  
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+  
+.action-button {
+    background-color: #8884d8;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+  
+.icon {
+    margin-right: 5px;
+}
+  
+.cards-section {
+    margin-top: 20px;
+    width: 100%; /* Full width */
+}
+  
+.card-option,
+.card-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Ensure card takes full width */
+    box-sizing: border-box; /* Include padding in width */
+}
+  
+.card-option .icon-placeholder {
+    font-size: 20px;
+    padding: 8px;
+    margin-right: 10px;
+}
+  
+.card-item .card-image-placeholder {
+    margin-right: 10px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+  
+.card-item img {
+    width: 300px; /* Adjust image size */
+    height: auto;
+    border-radius: 12px;
+}
+  
+.card-option h2,
+.card-item h2 {
+    font-size: 18px;
+}
+  
+.card-option p,
+.card-item p {
+    font-size: 14px;
+}
+  
+.arrow-icon {
+    margin-left: auto;
+    font-size: 18px;
+}
+  
+.footer {
+    margin-top: 30px;
+    font-size: 14px;
+    text-align: center;
+}
+  
+.footer a {
+    color: #0066cc;
+    text-decoration: none;
+}
+  
+.choose-card-section {
+    text-align: center;
+    margin-top: 20px;
+    width: 100%; /* Full width */
+}
+  
+.choose-card-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+  
+.card-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%; /* Ensure the selection area takes full width */
+}
+  
+.card-option-large {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rg    ba(0, 0, 0, 0.1);
+    width: 100%; /* Ensure the large card options take full width */
+    box-sizing: border-box; /* Include padding in width */
+}
+  
+.card-info {
+    max-width: 60%;
+    text-align: left;
+}
+  
+.card-info h3 {
+    font-size: 22px;
+    font-weight: bold;
+}
+  
+.card-info p {
+    margin: 10px 0;
+}
+  
+.card-info .tag {
+    display: inline-block;
+    background-color: #8884d8;
+    border-radius: 12px;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+  
+.card-info .cta {
+    font-weight: bold;
+    color: #ffffff;
+}
+  
+.card-image img {
+    max-width: 200px;
+    border-radius: 12px;
+}

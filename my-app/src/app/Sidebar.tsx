@@ -9,7 +9,7 @@ import "./sidebar.css";
 const navItems = [
   { name: "Sol Wallet", icon: <FaWallet />, route: "/" },
   { name: "Dashboard", icon: <FaTachometerAlt />, route: "/Dashboard-page" },
-  { name: "Transaction History", icon: <FaHistory />, route: "/transaction-history" },
+  { name: "Transaction", icon: <FaHistory />, route: "/transaction-history" },
   { name: "Sol Card", icon: <FaCreditCard />, route: "/sol-card" }
 ];
 

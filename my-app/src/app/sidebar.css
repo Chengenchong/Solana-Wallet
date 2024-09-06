@@ -5,9 +5,8 @@ body {
 }
 
 .sidebar {
-  z-index: 2;
-  border-radius: 8px;
-  width: 56px; /* Collapsed width */
+  z-index: 100 !important; /* Ensure it’s above other elements */  border-radius: 8px;
+  width: 56px !important; /* Enforce the width */
   background: #1a1a1a; /* Slightly lighter shade for the sidebar */
   backdrop-filter: blur(10px);
   transition: width 0.45s; /* Smooth transition on width change */
@@ -17,9 +16,8 @@ body {
 }
 
 .sidebar.open {
-  width: 230px; /* Expanded width */
+  width: 230px !important; /* Enforce expanded width */
 }
-
 .sidebar .inner {
   width: 100%;
 }
